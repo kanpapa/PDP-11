@@ -1,0 +1,29 @@
+       1                                   .title	kanpapa_test2
+       2                                
+       3                                   ; This program prints "kanpapa TEST #2"
+       4                                   ; char "B" on the serial console at 177560.
+       5                                   ; it repeats.
+       6                                
+       7                                   .asect
+       8                                
+       9  FF70h                            serial = 177560	   ; base addr of DL11
+      10                                
+      11                                
+      12  0400h                            .=2000
+      13                                
+      14                                start:
+      15  0400h  15C2h   FF74h             mov #serial+4,r2
+      16                                loop:
+      17  0404h  95F2h   0042h   0002h     movb #0102, 2(r2)
+      18                                wait:
+      19  040Ah  8BCAh                     tstb (r2)
+      20  040Ch  80FEh                     bpl wait
+      21                                
+      22  040Eh  01FAh                     br  loop
+      23                                
+      24  0410h  0000h                  done:	     halt
+      25  0412h  01F6h                     br	     start
+      26                                
+      27                                   .end
+      28                                
+      28                                

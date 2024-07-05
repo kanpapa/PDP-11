@@ -1,0 +1,28 @@
+   .title	kanpapa_test2
+
+   ; This program prints "kanpapa TEST #2"
+   ; char "B" on the serial console at 177560.
+   ; it repeats.
+
+   .asect
+
+   serial = 177560	   ; base addr of DL11
+
+
+   .=2000
+
+start:
+   mov #serial+4,r2
+loop:
+   movb #0102, 2(r2)
+wait:
+   tstb (r2)
+   bpl wait
+
+   br  loop
+
+done:	     halt
+   br	     start
+
+   .end
+

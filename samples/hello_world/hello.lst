@@ -1,0 +1,39 @@
+       1                                   .title Hello
+       2                                
+       3                                   ; This program prints "Hello, world"
+       4                                   ; (or any other string) on the serial console at 177650.
+       5                                   ; Then it HALTs.
+       6                                   ; On CONT, it repeats.
+       7                                
+       8                                   .asect
+       9                                
+      10 177560                            serial = 177560	   ; base addr of DL11
+      11                                
+      12                                
+      13 002000                            .=2000
+      14                                
+      15                                start:
+      16 002000 012702  177564             mov	      #serial+4,r2	  ; r2 points to DL11 transmitter section
+      17 002004 012701  002032             mov	      #string,r1	; r1 points to the current character
+      18                                nxtchr:
+      19 002010 112100                     movb        (r1)+,r0        ; load xmt char into r0
+      20 002012 001405                     beq	      done		  ; string ends with 0
+      21                                
+      22 002014 110062  000002             movb        r0,2(r2)        ; xmt char
+      23 002020 105712                  wait:	     tstb	 (r2)		     ; character transmitted?
+      24 002022 100376                     bpl	      wait		  ; no, loop
+      25 002024 000771                     br	     nxtchr		   ; transmit nxt char of string
+      26                                
+      27 002026 000000                  done:	     halt
+      28 002030 000763                     br	     start
+      29                                
+      30                                string:
+      31 002032    015     012             .byte	15,12		     ; CR, LF
+      32 002034    110     145     154     .ascii	 /Hello, world!/ ; arbitrary text
+         002037    154     157     054  
+         002042    040     167     157  
+         002045    162     154     144  
+         002050    041                  
+      33 002051    015     012     000     .byte	15,12,0 	; CR, LF, NUL=end marker
+      34                                
+      34                                   .end

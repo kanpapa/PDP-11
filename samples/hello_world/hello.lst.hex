@@ -1,0 +1,39 @@
+       1                                   .title Hello
+       2                                
+       3                                   ; This program prints "Hello, world"
+       4                                   ; (or any other string) on the serial console at 177650.
+       5                                   ; Then it HALTs.
+       6                                   ; On CONT, it repeats.
+       7                                
+       8                                   .asect
+       9                                
+      10  FF70h                            serial = 177560	   ; base addr of DL11
+      11                                
+      12                                
+      13  0400h                            .=2000
+      14                                
+      15                                start:
+      16  0400h  15C2h   FF74h             mov	      #serial+4,r2	  ; r2 points to DL11 transmitter section
+      17  0404h  15C1h   041Ah             mov	      #string,r1	; r1 points to the current character
+      18                                nxtchr:
+      19  0408h  9440h                     movb        (r1)+,r0        ; load xmt char into r0
+      20  040Ah  0305h                     beq	      done		  ; string ends with 0
+      21                                
+      22  040Ch  9032h   0002h             movb        r0,2(r2)        ; xmt char
+      23  0410h  8BCAh                  wait:	     tstb	 (r2)		     ; character transmitted?
+      24  0412h  80FEh                     bpl	      wait		  ; no, loop
+      25  0414h  01F9h                     br	     nxtchr		   ; transmit nxt char of string
+      26                                
+      27  0416h  0000h                  done:	     halt
+      28  0418h  01F3h                     br	     start
+      29                                
+      30                                string:
+      31  041Ah    0Dh     0Ah             .byte	15,12		     ; CR, LF
+      32  041Ch    48h     65h     6Ch     .ascii	 /Hello, world!/ ; arbitrary text
+          041Fh    6Ch     6Fh     2Ch  
+          0422h    20h     77h     6Fh  
+          0425h    72h     6Ch     64h  
+          0428h    21h                  
+      33  0429h    0Dh     0Ah     00h     .byte	15,12,0 	; CR, LF, NUL=end marker
+      34                                
+      34                                   .end
