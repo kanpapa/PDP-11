@@ -9,7 +9,7 @@
    serial = 177560	   ; base addr of DL11
 
 
-   .=2000
+   .=10
 
 start:
    bit #0200, @#serial+4
