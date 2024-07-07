@@ -1,0 +1,14 @@
+   .title	hack_test1
+
+   ;PDP-11 Test #1 - Increment R5 and return to ODT
+
+   .asect
+
+   .=0
+
+start:
+   inc r5
+   halt
+
+   .end
+
