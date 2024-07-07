@@ -1,0 +1,23 @@
+       1                                   .title	hack_test2
+       2                                
+       3                                   ; This program prints "TEST #2"
+       4                                   ; char "B" on the serial console at 177560.
+       5                                   ; it repeats.
+       6                                
+       7                                   .asect
+       8                                
+       9 177560                            serial = 177560	   ; base addr of DL11
+      10                                
+      11                                
+      12 002000                            .=2000
+      13                                
+      14                                start:
+      15 002000 032737  000200  177564     bit #0200, @#serial+4
+      16 002006 001774                     beq start
+      17                                
+      18 002010 012737  000102  177566     mov #0102, @#serial+6
+      19 002016 000770                     br  start
+      20                                
+      21                                   .end
+      22                                
+      22                                

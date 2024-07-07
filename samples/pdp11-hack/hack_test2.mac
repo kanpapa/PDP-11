@@ -1,0 +1,22 @@
+   .title	hack_test2
+
+   ; This program prints "TEST #2"
+   ; char "B" on the serial console at 177560.
+   ; it repeats.
+
+   .asect
+
+   serial = 177560	   ; base addr of DL11
+
+
+   .=2000
+
+start:
+   bit #0200, @#serial+4
+   beq start
+
+   mov #0102, @#serial+6
+   br  start
+
+   .end
+
